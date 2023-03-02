@@ -2,31 +2,108 @@
 padding: 0;
 margin: 0;
 }
-
+body{
+    background-color: aqua;
+}
 #main_container{
     padding: 20px;
     margin: 10px;
-    border: 2px solid black;
     position: absolute;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
-.welcome_div{
+#home_div{
     padding: 10px;
     margin: 10px;
     text-align: center;
 
 }
-h1{
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-weight: bolder;
+
+#home_div h1{
     font-size: 50px;
+    margin-left: -30px;
+}
+.heading{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 40px;
+    border: 2px solid black;
+    border-width: 0 0 0.5px 0;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    background-color: white;
+}
+
+form{
+    text-align: left;
+    margin-top: 20px;
+    margin-left: 30px;
+}
+
+
+.login_label{
+    display: block;
+    margin: 7px;
+    margin-left: -3px;
+    font-size: 20px;
+}
+
+input{
+    padding: 10px;
+    border: 1px solid gray;
+    width: 280px;
+    font-size: 15px;
+    border-width: 0 0 2px;
+}
+
+.btn{
+    margin: 25px 0;
+    padding: 10px;
+    font-size: 16px;
+    width: 300px;
+    color: white;
+    border-radius: 50px;
+    background-color: rgb(15, 147, 241);
+}
+
+
+
+.form_wrapper{
+    padding: 20px;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+    border: 2px solid ghostwhite;
+    background-color: white;
 
 }
-button{
-    margin: 10px;
-    padding: 10px;
-    font-weight: bolder;
-    font-size: x-large;
+
+.forgot_password{
+    margin: 15px 5px 0 -5px;
+    padding: 5px;
+    
+}
+.message{
+    text-align: center;
+    margin-top: 10px;
+    padding: 3px;
+}
+span{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    
+    color: rgb(74, 180, 251);
+}
+
+.register_button_wrapper{
+    margin-left: 25px;
+}
+
+.homePage_button_wrapper button{
+    width: 120px;
+    margin-top: 50px;
+    padding: 5px;
+    margin-right: 35px;
+
 }
