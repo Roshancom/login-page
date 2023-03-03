@@ -9,7 +9,7 @@ body{
     padding: 20px;
     margin: 10px;
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -94,6 +94,7 @@ span{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     
     color: rgb(74, 180, 251);
+    cursor: progress;
 }
 
 .register_button_wrapper{
@@ -106,4 +107,15 @@ span{
     padding: 5px;
     margin-right: 35px;
 
+}
+
+.form_wrapper a{
+    text-decoration: auto;
+    color: white;
+}
+.Login_page{
+    background-color: white;
+}
+.Register_page span{
+    color: red;
 }
