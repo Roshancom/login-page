@@ -1,22 +1,20 @@
-
 const displayPage = document.getElementById("main_container");
 
 const landingPage = ` <section id="landing_page">
 <div class="landing_div">
   <h1>Landing Page</h1>
 </div>
-</section>`
+</section>`;
 
 const homePage = `<section id="home_page">
 <div id="home_div">
  <h1>Home Page</h1>
  <div class="homePage_button_wrapper">
      <button class="btn" onclick="signUpButton()" >Signup</button>
-     <button class="btn" onclick="registerButton()" >Login</button>
+     <button class="btn" onclick="homaPageLoginButton()" >Login</button>
    </div>
 </div>
 </section>`;
-
 
 const logInPage = `<section id="register_page">
 <div class="heading">
@@ -24,17 +22,17 @@ Login
 </div>
 <div class="form_wrapper"> 
 
-<form action="">
+<form>
 <div class="form_field">
-<label class="login_label" for="title" class="required">Email :</label>
-<input type="text" placeholder="Type your Email"> 
+<label class="login_label" for="title" >Email :</label>
+<input id="mail_validation" type="text" placeholder="Type your Email"> 
 </div>
 <div class="form_field">
-<label class="login_label" for="title" class="required">Password :</label>
-<input type="text" placeholder="Type your Password">
+<label class="login_label" for="title" >Password :</label>
+<input id="password_validation" type="text" placeholder="Type your Password">
 </div>
 <div class="forgot_password">
-Forgot Password?
+<span onclick="signUpButton()">Forgot Password?</span>
 </div>
 <button class="btn" onclick="landingButton()">Login</button>
 <div class="message">
@@ -66,35 +64,53 @@ Register
 </div>
 </section>`;
 
-
 displayPage.innerHTML = homePage;
 
 const signUpButton = () => {
-   console.log("hello")
-    displayPage.innerHTML = registerPage;
+  console.log("hello");
+  displayPage.innerHTML = registerPage;
 };
 
+const homaPageLoginButton = () => (displayPage.innerHTML = logInPage);
 
+//collect data from user and store in localStorage.
 const registerButton = () => {
-    const fName = document.getElementById("fName").value;
-    const lName = document.getElementById("lName").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    let infoObj = {fName,lName,email,password};
-    
-    localStorage.setItem("info",infoObj);
+  const fName = document.getElementById("fName").value;
+  const lName = document.getElementById("lName").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  let infoObj = { fName, lName, email, password };
 
+  localStorage.setItem("info", JSON.stringify(infoObj));
 
-    displayPage.innerHTML = logInPage;
+  displayPage.innerHTML = logInPage;
 };
 
-const logInButton = () => {
-    console.log("y")
-  displayPage.innerHTML = homePage;
-};
- 
-
-const landingButton = ()=> {
-    console.log("z")
+//check email and password, if correct display landing page.
+const landingButton = () => {
+  const passwordValidation = document.getElementById(
+    "password_validation"
+  ).value;
+  console.log(passwordValidation);
+  const emailValidation = document.getElementById("mail_validation").value;
+  console.log(emailValidation);
+  const storeData = { emailValidation, passwordValidation };
+  console.log(storeData);
+  const registerData = JSON.parse(localStorage.getItem("info"));
+  console.log(registerData);
+  if (
+    emailValidation === registerData.email &&
+    passwordValidation === registerData.password &&
+    emailValidation !== "" &&
+    emailValidation !== ""
+  ) {
     displayPage.innerHTML = landingPage;
-}
+  } else if (emailValidation !== registerData.email) {
+    alert("Please enter correct email");
+  } else if (passwordValidation !== registerData.password) {
+    alert("Please enter correct password");
+  }else if(emailValidation == "" &&
+  emailValidation == ""){
+    alert("Please enter email and password")
+  }
+};
