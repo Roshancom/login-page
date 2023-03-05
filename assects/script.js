@@ -52,7 +52,7 @@ Login
 </div>
 
 <div class="form_wrapper"> 
- <form >
+ <form id="login_form">
   
     <label class="login_label" for="title" >Email :</label>
     <input id="mail_validation" type="text" placeholder="Type your Email"> 
@@ -67,7 +67,7 @@ Login
     <div class="forgot_password">
       <span onclick="signUpButton()">Forgot Password?</span>
     </div>
-    <button class="btn" onclick="landingHandler()">Login</button>
+    <button class="btn" id="login_btn">Login</button>
     <div class="message">
       Not a member? <span onclick="signUpHandler()">Signup</span>
     </div>
@@ -153,7 +153,9 @@ const registerHandler = () => {
 
 
 //check email and password, if correct display landing page.
-const landingHandler = () => {
+const landingHandler = (event) => {
+
+  event.preventDefault();
 
   const validationMessage = {
     email: "Email field is required!",
@@ -196,5 +198,6 @@ const landingHandler = () => {
   emailError.innerHTML = errorMessageInLoginForm[0]["email"];
   passwordError.innerHTML = errorMessageInLoginForm[1]["password"];
 
+  
   
 };
