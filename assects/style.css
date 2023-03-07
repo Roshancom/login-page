@@ -121,3 +121,16 @@
         font-size: 12px;
       
     }
+    #emailError, #passwordError {
+        color: red;
+        font-size: 12px;
+    }
+    .logOff_btn{
+        margin: 25px 0;
+        padding: 10px;
+        font-size: 16px;
+        width: 100px;
+        color: white;
+        border-radius: 50px;
+        background-color: rgb(15, 147, 241);
+    }

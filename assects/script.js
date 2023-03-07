@@ -1,5 +1,6 @@
 const displayPage = document.getElementById("main_container");
 
+
 const homePage = `<section id="home_page">
 <div id="home_div">
  <h1>Home Page</h1>
@@ -43,6 +44,7 @@ const registerPage = `<section id="Register_page">
  <div class="register_button_wrapper">
    <button class="btn" onclick="registerHandler()">Register</button>
  </div>
+ <span onclick="homaPageLoginHandler()" > Already register</span>
 </div>
 </section>`;
 
@@ -52,7 +54,7 @@ Login
 </div>
 
 <div class="form_wrapper"> 
- <form id="login_form">
+ <form id="login_form" onsubmit="preventSubmitForm(event)">
   
     <label class="login_label" for="title" >Email :</label>
     <input id="mail_validation" type="text" placeholder="Type your Email"> 
@@ -63,45 +65,46 @@ Login
     <input id="password_validation" type="text" placeholder="Type your Password">
     <br>
     <span id="passwordError"></span>
-
+    
     <div class="forgot_password">
-      <span onclick="signUpButton()">Forgot Password?</span>
+    <span onclick="signUpHandler()">Forgot Password?</span>
     </div>
-    <button class="btn" id="login_btn">Login</button>
+    <button class="btn" type="submit" id="login_btn" >Login</button>
     <div class="message">
-      Not a member? <span onclick="signUpHandler()">Signup</span>
+    Not a member? <span onclick="signUpHandler()">Signup</span>
     </div>
- </form>
-</div>
+    </form>
+    </div>
 </section>`;
 
 const landingPage = ` <section id="landing_page">
+<div id="logOff_btn_wrapper">
+  <button class="logOff_btn" onclick="logOffHandler()">Log off</button>
+</div>
 <div class="landing_div">
   <h1>Landing Page</h1>
 </div>
 </section>`;
 
-
 //first page
-displayPage.innerHTML = homePage;
+displayPage.innerHTML =  homePage;
+
 
 //Events handler
 const signUpHandler = () => {
   displayPage.innerHTML = registerPage;
 };
 
-const homaPageLoginHandler = () => (displayPage.innerHTML = logInPage);
-
-
-
+const homaPageLoginHandler = () => {
+   displayPage.innerHTML = logInPage
+};
 
 const registerHandler = () => {
-
   const validationMessage = {
     fName: "FirstName field is required!",
     lName: "LastName field is required!",
     email: "Email field is required!",
-    password: "Password field is required!"
+    password: "Password field is required!",
   };
 
   //collected data from user and store in localStorage.
@@ -109,58 +112,68 @@ const registerHandler = () => {
   const lName = document.getElementById("lName").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  let infoObj = { fName, lName, email, password };
-  localStorage.setItem("info", JSON.stringify(infoObj));
 
+  //set Data in localStorage
+  if (fName && lName && email && password) {
+    let infoObj = { fName, lName, email, password };
+    let index = localStorage.length;
+    localStorage.setItem("info" + index, JSON.stringify(infoObj));
+  }
 
-    //registration form validation
+  //registration form validation
   const fNameError = document.getElementById("fNameErrorMsg");
   const lNameError = document.getElementById("lNameErrorMsg");
   const emailError = document.getElementById("emailErrorMsg");
   const passwordError = document.getElementById("passwordErrorMsg");
   let errorMessageInRegisterForm = [];
-  
+
   if (!fName) {
-    errorMessageInRegisterForm.push({ "fName": validationMessage.fName });
-  } else{errorMessageInRegisterForm.push({"fName":""})}
+    errorMessageInRegisterForm.push({ fName: validationMessage.fName });
+  } else {
+    errorMessageInRegisterForm.push({ fName: "" });
+  }
 
   if (!lName) {
-    errorMessageInRegisterForm.push({ "lName": validationMessage.lName });
-  }else{errorMessageInRegisterForm.push({"lName":""})}
-
+    errorMessageInRegisterForm.push({ lName: validationMessage.lName });
+  } else {
+    errorMessageInRegisterForm.push({ lName: "" });
+  }
 
   if (!email) {
-    errorMessageInRegisterForm.push({ "email": validationMessage.email });
-  }else{errorMessageInRegisterForm.push({"email":""})}
-
+    errorMessageInRegisterForm.push({ email: validationMessage.email });
+  } else {
+    errorMessageInRegisterForm.push({ email: "" });
+  }
 
   if (!password) {
-    errorMessageInRegisterForm.push({ "password": validationMessage.password });
-  }else{errorMessageInRegisterForm.push({"password":""})}
-
+    errorMessageInRegisterForm.push({ password: validationMessage.password });
+  } else {
+    errorMessageInRegisterForm.push({ password: "" });
+  }
 
   if (fName && lName && email && password) {
     displayPage.innerHTML = logInPage;
   }
 
-
   fNameError.innerHTML = errorMessageInRegisterForm[0]["fName"];
   lNameError.innerHTML = errorMessageInRegisterForm[1]["lName"];
   emailError.innerHTML = errorMessageInRegisterForm[2]["email"];
   passwordError.innerHTML = errorMessageInRegisterForm[3]["password"];
-
 };
 
-
 //check email and password, if correct display landing page.
-const landingHandler = (event) => {
+const landingHandler = () => {
 
-  event.preventDefault();
+    // window.location.hash = '#login';
+
+   
+    
+
 
   const validationMessage = {
     email: "Email field is required!",
-    password: "Password field is required!"
-  }
+    password: "Password field is required!",
+  };
   const errorMessageInLoginForm = [];
 
   const emailError = document.getElementById("emailError");
@@ -171,33 +184,50 @@ const landingHandler = (event) => {
     "password_validation"
   ).value;
 
-  const registerData = JSON.parse(localStorage.getItem("info"));
+  for (let i = 0; i < localStorage.length; i++) {
+    
+    const Data = localStorage.key(i);
+    let registerData = JSON.parse(localStorage.getItem(Data));
 
-  //validation statements 
-  if (
-    emailValidation === registerData.email &&
-    passwordValidation === registerData.password &&
-    emailValidation !== "" &&
-    passwordValidation !== ""
-  ) {displayPage.innerHTML = landingPage;} 
-  
+    if (
+      emailValidation === registerData.email &&
+      passwordValidation === registerData.password &&
+      emailValidation !== "" &&
+      passwordValidation !== ""
+    ) {
+      displayPage.innerHTML = landingPage;
+    }
 
-  if (!emailValidation)
-   {
-   errorMessageInLoginForm.push({"email": validationMessage.email})
-  } else{errorMessageInLoginForm.push({"email": ""})}
+    if (!emailValidation || emailValidation !== registerData.email) {
+      errorMessageInLoginForm.push({ email: validationMessage.email });
+    } else {
+      errorMessageInLoginForm.push({ email: "" });
+    }
 
-  
-  if (!passwordValidation) 
-  {
-    errorMessageInLoginForm.push({"password": validationMessage.password})
-  }else { errorMessageInLoginForm.push({"password": "" })} 
-  
-  
+    if (!passwordValidation || passwordValidation !== registerData.password) {
+      errorMessageInLoginForm.push({ password: validationMessage.password });
+    } else {
+      errorMessageInLoginForm.push({ password: "" });
+    }
+
+    emailError.innerHTML = errorMessageInLoginForm[0]["email"];
+    passwordError.innerHTML = errorMessageInLoginForm[1]["password"];
+  }
+
  
-  emailError.innerHTML = errorMessageInLoginForm[0]["email"];
-  passwordError.innerHTML = errorMessageInLoginForm[1]["password"];
+};
 
-  
+const preventSubmitForm = (event) => {
+  event.preventDefault();
+  landingHandler();
   
 };
+
+
+
+
+
+
+
+
+let  logOffHandler = ()=>{ displayPage.innerHTML = homePage};
