@@ -1,6 +1,5 @@
 const displayPage = document.getElementById("main_container");
 
-
 const homePage = `<section id="home_page">
 <div id="home_div">
  <h1>Home Page</h1>
@@ -78,25 +77,35 @@ Login
 </section>`;
 
 const landingPage = ` <section id="landing_page">
+<div class="landing_div">
+  <h1>Welcome to Landing Page</h1>
+  
+</div>  
+<h3 id="userName" ></h3>
 <div id="logOff_btn_wrapper">
   <button class="logOff_btn" onclick="logOffHandler()">Log off</button>
 </div>
-<div class="landing_div">
-  <h1>Landing Page</h1>
-</div>
 </section>`;
 
-//first page
-displayPage.innerHTML =  homePage;
-
-
-//Events handler
+//display home page and landing page even after refresh
+const displayLandingPage = ()=>{ 
+const autherize = JSON.parse(localStorage.getItem("isAuth"));
+if (autherize) {
+  displayPage.innerHTML = landingPage;
+  const userName = document.getElementById("userName");
+  let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  userName.innerHTML = userInfo;
+} else {
+  displayPage.innerHTML = homePage;
+}
+}
+//Events handler  {
 const signUpHandler = () => {
   displayPage.innerHTML = registerPage;
 };
 
 const homaPageLoginHandler = () => {
-   displayPage.innerHTML = logInPage
+  displayPage.innerHTML = logInPage;
 };
 
 const registerHandler = () => {
@@ -113,11 +122,16 @@ const registerHandler = () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  //set Data in localStorage
+  //set Data in sessionStorage
   if (fName && lName && email && password) {
-    let infoObj = { fName, lName, email, password };
-    let index = localStorage.length;
-    localStorage.setItem("info" + index, JSON.stringify(infoObj));
+    const userInfo = { fName, lName, email, password };
+    // const users =[userInfo];
+    // users.push(userInfo);
+    // localStorage.setItem("user", JSON.stringify(users));
+    const storedData = JSON.parse(localStorage.getItem("user")) || [];
+    storedData.push(userInfo);
+
+    localStorage.setItem("user", JSON.stringify(storedData));
   }
 
   //registration form validation
@@ -155,6 +169,7 @@ const registerHandler = () => {
     displayPage.innerHTML = logInPage;
   }
 
+  //display error messaage.
   fNameError.innerHTML = errorMessageInRegisterForm[0]["fName"];
   lNameError.innerHTML = errorMessageInRegisterForm[1]["lName"];
   emailError.innerHTML = errorMessageInRegisterForm[2]["email"];
@@ -162,14 +177,7 @@ const registerHandler = () => {
 };
 
 //check email and password, if correct display landing page.
-const landingHandler = () => {
-
-    // window.location.hash = '#login';
-
-   
-    
-
-
+const loginHandler = () => {
   const validationMessage = {
     email: "Email field is required!",
     password: "Password field is required!",
@@ -184,50 +192,62 @@ const landingHandler = () => {
     "password_validation"
   ).value;
 
-  for (let i = 0; i < localStorage.length; i++) {
-    
-    const Data = localStorage.key(i);
-    let registerData = JSON.parse(localStorage.getItem(Data));
 
+
+  //target all stored data from localStorage
+  const userName = document.getElementById("userName");
+  let registerData = JSON.parse(localStorage.getItem("user"));
+
+  for (let i = 0; i < registerData.length; i++) {
     if (
-      emailValidation === registerData.email &&
-      passwordValidation === registerData.password &&
+      emailValidation === registerData[i].email &&
+      passwordValidation === registerData[i].password &&
       emailValidation !== "" &&
       passwordValidation !== ""
     ) {
-      displayPage.innerHTML = landingPage;
+      localStorage.setItem("isAuth", JSON.stringify(true));
+
+      localStorage.setItem("userInfo",JSON.stringify(`${registerData[i].fName} ${registerData[i].lName}`));
+      displayLandingPage();
+      
+      
     }
 
-    if (!emailValidation || emailValidation !== registerData.email) {
+    if (!emailValidation || emailValidation !== registerData[i].email) {
       errorMessageInLoginForm.push({ email: validationMessage.email });
     } else {
       errorMessageInLoginForm.push({ email: "" });
     }
 
-    if (!passwordValidation || passwordValidation !== registerData.password) {
+    if (
+      !passwordValidation ||
+      passwordValidation !== registerData[i].password
+    ) {
       errorMessageInLoginForm.push({ password: validationMessage.password });
     } else {
       errorMessageInLoginForm.push({ password: "" });
     }
 
+    // if (emailValidation === registerData[i].email) {
+    //   userName.innerHTML = `Dear ${registerData[i].fName} ${registerData[i].lName}`;
+    // }
     emailError.innerHTML = errorMessageInLoginForm[0]["email"];
     passwordError.innerHTML = errorMessageInLoginForm[1]["password"];
   }
-
- 
 };
 
+//event trigger after login
 const preventSubmitForm = (event) => {
   event.preventDefault();
-  landingHandler();
-  
+  loginHandler();
 };
 
+let logOffHandler = () => {
+  
+  localStorage.removeItem("userInfo");
+    localStorage.setItem("isAuth", JSON.stringify(false));
 
-
-
-
-
-
-
-let  logOffHandler = ()=>{ displayPage.innerHTML = homePage};
+    displayPage.innerHTML = homePage;
+  // }
+};
+displayLandingPage();
