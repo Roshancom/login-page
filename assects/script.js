@@ -76,14 +76,40 @@ Login
     </div>
 </section>`;
 
-const landingPage = ` <section id="landing_page">
-<div class="landing_div">
-  <h1>Welcome to Landing Page</h1>
-  
-</div>  
-<h3 id="userName" ></h3>
-<div id="logOff_btn_wrapper">
-  <button class="logOff_btn" onclick="logOffHandler()">Log off</button>
+const landingPage = ` <section id="landingPage_section">
+<nav id="navbar">
+    <h1 class="logo">logo</h1>
+    <div class="nav_div">
+        <a href="">Home</a>
+        <a href="">Documentation</a>
+        <a href="">Blog</a> 
+        <a href="">Contact</a>
+    </div>
+    <div id="logOff_btn_wrapper">
+        <button class="logOff_btn" onclick="logOffHandler()">Log off</button>
+      </div>
+</nav>
+<div id="container">
+    <div class="heading_wrapper">
+        <h1>code better <br><span>be creative</span></h1>
+        <div class="artical">
+            <h3> Write Code That Stands the Test of Time</h3>
+           <ul>
+             <li>Treat Your Code the Way You Want Others’ Code to Treat You</li>
+             <li>Good Code Is Easily Read and Understood</li>
+             <li>Good Code Has a Well Thought-out Layout and Architecture to Make Managing State Obvious</li>
+             <li>Good Code Doesn’t Reinvent the Wheel, It Stands on the Shoulders of Giants</li>
+             <li> Don’t Cross the Streams!</li>
+             <li>When Possible, Let the Computer Do the Work</li>
+            </ul>
+         </div>
+        </div>
+      </div>
+     <div class="footer">
+    <button class="btn">more Info</button>
+    <div>
+       <h2>Welcome to the page : <span id="userName"/></h2>
+    </div>
 </div>
 </section>`;
 
@@ -228,9 +254,7 @@ const loginHandler = () => {
       errorMessageInLoginForm.push({ password: "" });
     }
 
-    // if (emailValidation === registerData[i].email) {
-    //   userName.innerHTML = `Dear ${registerData[i].fName} ${registerData[i].lName}`;
-    // }
+ 
     emailError.innerHTML = errorMessageInLoginForm[0]["email"];
     passwordError.innerHTML = errorMessageInLoginForm[1]["password"];
   }
