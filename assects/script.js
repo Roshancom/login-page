@@ -29,19 +29,23 @@ const registerPage = `<section id="Register_page">
    <span id="lNameErrorMsg"></span>
 
    <label for="title" class="login_label" >Email :</label>
-   <input id="email" type="text" placeholder = "Email">
+   <input id="email" type="email" placeholder = "Email">
    <br>
    <span id="emailErrorMsg"></span>
 
    <label for="title" class="login_label" >Password :</label>
-   <input id="password" type="text" placeholder="Password">
+   <div id="image_wrapper">
+   <input id="password" type="password" placeholder="Password">
+   <img src="./assects/hidden.png" alt="show password" id="hiddenImage" style="display: block" onclick="changeHiddenImage()">
+    <img src="./assects/show.png" alt="show password" id="showImage" style="display: none" onclick="changeShowImage()"> 
+    </div>
    <br>
    <span id="passwordErrorMsg"></span>
 
  </form>
 
  <div class="register_button_wrapper">
-   <button class="btn" onclick="registerHandler()">Register</button>
+   <button class="btn" onclick="registerHandler()">Register  </button>
  </div>
  <span onclick="homaPageLoginHandler()" > Already register</span>
 </div>
@@ -56,12 +60,12 @@ Login
  <form id="login_form" onsubmit="preventSubmitForm(event)">
   
     <label class="login_label" for="title" >Email :</label>
-    <input id="mail_validation" type="text" placeholder="Type your Email"> 
+    <input id="mail_validation" type="email" placeholder="Type your Email"> 
     <br>
     <span id="emailError"></span>
   
     <label class="login_label" for="title" >Password :</label>
-    <input id="password_validation" type="text" placeholder="Type your Password">
+    <input id="password_validation" type="password" placeholder="Type your Password">
     <br>
     <span id="passwordError"></span>
     
@@ -221,7 +225,6 @@ const loginHandler = () => {
 
 
   //target all stored data from localStorage
-  const userName = document.getElementById("userName");
   let registerData = JSON.parse(localStorage.getItem("user"));
 
   for (let i = 0; i < registerData.length; i++) {
@@ -275,3 +278,22 @@ let logOffHandler = () => {
   // }
 };
 displayLandingPage();
+
+const changeHiddenImage = ()=>{
+    const passwordImg = document.getElementById("password");
+    const hiddenImage = document.getElementById("hiddenImage");
+    const showImage = document.getElementById("showImage");
+    hiddenImage.style.display = "none";
+    showImage.style.display = "block";
+    passwordImg.setAttribute("type", "text");
+
+}
+const changeShowImage = ()=> {
+  const passwordImg = document.getElementById("password");
+  const hiddenImage = document.getElementById("hiddenImage");
+  const showImage = document.getElementById("showImage");
+  showImage.style.display = "none";
+  hiddenImage.style.display = "block";
+  passwordImg.setAttribute("type", "password");
+
+}

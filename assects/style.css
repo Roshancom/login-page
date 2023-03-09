@@ -243,3 +243,13 @@
    h2{
         text-align: center;
     }
+    #image_wrapper{
+        display: flex;
+        position: relative;
+    }
+    img{
+    width: 30px;
+    height: 35px;
+    position: absolute;
+    right: 2px;
+    }
