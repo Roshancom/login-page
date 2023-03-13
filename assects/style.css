@@ -103,7 +103,7 @@
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         
         color: rgb(74, 180, 251);
-        cursor: progress;
+        cursor: default;
     }
     
     #Login_page .form_wrapper #emailError, #passwordError{
@@ -132,7 +132,6 @@
     #register_form span{
         color: red;
         font-size: 12px;
-      
     }
 
 /* css for landing page */
@@ -234,7 +233,9 @@
         font-family: Georgia, 'Times New Roman', Times, serif;
         letter-spacing: 1px;
         color: #010101;
-       padding: 5px;
+        padding: 5px;
+        cursor: default;
+
     }
     #userName:hover{
         background-color: #f9fafa;
@@ -252,4 +253,8 @@
     height: 35px;
     position: absolute;
     right: 2px;
+    }
+    .error{
+        display: block;
+        height: 15px;
     }

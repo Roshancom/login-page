@@ -19,28 +19,28 @@ const registerPage = `<section id="Register_page">
  <form  id="register_form" >
 
    <label for="title" class="login_label">First Name :</label>
-   <input id="fName" type="text" placeholder = "First Name">
+   <input id="fName" type="text" placeholder = "First Name" onkeydown="clearfNameSpan()">
    <br>
-   <span id="fNameErrorMsg"></span>
+   <span id="fNameErrorMsg"  class= "error"></span>
 
    <label for="title" class="login_label" >Last Name :</label>
-   <input id="lName" type="text" placeholder = "Last Name">
+   <input id="lName" type="text" placeholder = "Last Name" onkeydown="clearlNameSpan()" >
    <br>
-   <span id="lNameErrorMsg"></span>
+   <span id="lNameErrorMsg" class= "error" ></span>
 
    <label for="title" class="login_label" >Email :</label>
-   <input id="email" type="email" placeholder = "Email">
+   <input id="email" type="email" placeholder = "Email" onkeydown="clearEmailSpan()" >
    <br>
-   <span id="emailErrorMsg"></span>
+   <span id="emailErrorMsg" class= "error" ></span>
 
    <label for="title" class="login_label" >Password :</label>
    <div id="image_wrapper">
-   <input id="password" type="password" placeholder="Password">
-   <img src="./assects/hidden.png" alt="show password" id="hiddenImage" style="display: block" onclick="changeHiddenImage()">
-    <img src="./assects/show.png" alt="show password" id="showImage" style="display: none" onclick="changeShowImage()"> 
+   <input id="password" type="password" placeholder="Password" onkeydown="clearPasswordSpan()" >
+   <img src="./assects/hidden.png" alt="show password" id="hiddenImage" style="display: block" onclick="changeRegisterPageHiddenImage()">
+    <img src="./assects/show.png" alt="show password" id="showImage" style="display: none" onclick="changeRegisterPageShowImage()"> 
     </div>
    <br>
-   <span id="passwordErrorMsg"></span>
+   <span id="passwordErrorMsg" class= "error" ></span>
 
  </form>
 
@@ -60,14 +60,18 @@ Login
  <form id="login_form" onsubmit="preventSubmitForm(event)">
   
     <label class="login_label" for="title" >Email :</label>
-    <input id="mail_validation" type="email" placeholder="Type your Email"> 
+    <input id="mail_validation" type="email" placeholder="Type your Email" onkeydown="deleteEmailError()" > 
     <br>
-    <span id="emailError"></span>
+    <span id="emailError" class="error"></span>
   
     <label class="login_label" for="title" >Password :</label>
-    <input id="password_validation" type="password" placeholder="Type your Password">
+    <div id="image_wrapper">
+    <input id="password_validation" type="password" placeholder="Type your Password" onkeydown="deletePassword()" >
+    <img src="./assects/hidden.png" alt="show password" id="hiddenImage" style="display: block" onclick="changeLoginPageHiddenImage()">
+    <img src="./assects/show.png" alt="show password" id="showImage" style="display: none" onclick="changeLoginPageShowImage()"> 
+    </div>
     <br>
-    <span id="passwordError"></span>
+    <span id="passwordError" class="error"></span>
     
     <div class="forgot_password">
     <span onclick="signUpHandler()">Forgot Password?</span>
@@ -118,17 +122,17 @@ const landingPage = ` <section id="landingPage_section">
 </section>`;
 
 //display home page and landing page even after refresh
-const displayLandingPage = ()=>{ 
-const autherize = JSON.parse(localStorage.getItem("isAuth"));
-if (autherize) {
-  displayPage.innerHTML = landingPage;
-  const userName = document.getElementById("userName");
-  let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  userName.innerHTML = userInfo;
-} else {
-  displayPage.innerHTML = homePage;
-}
-}
+const displayLandingPage = () => {
+  const autherize = JSON.parse(localStorage.getItem("isAuth"));
+  if (autherize) {
+    displayPage.innerHTML = landingPage;
+    const userName = document.getElementById("userName");
+    let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    userName.innerHTML = userInfo;
+  } else {
+    displayPage.innerHTML = homePage;
+  }
+};
 //Events handler  {
 const signUpHandler = () => {
   displayPage.innerHTML = registerPage;
@@ -147,12 +151,12 @@ const registerHandler = () => {
   };
 
   //collected data from user and store in localStorage.
-  const fName = document.getElementById("fName").value;
-  const lName = document.getElementById("lName").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const fName = document.getElementById("fName").value.trim();
+  const lName = document.getElementById("lName").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-  //set Data in sessionStorage
+  //set Data in localStorage
   if (fName && lName && email && password) {
     const userInfo = { fName, lName, email, password };
     // const users =[userInfo];
@@ -211,53 +215,75 @@ const loginHandler = () => {
   const validationMessage = {
     email: "Email field is required!",
     password: "Password field is required!",
+    wrongEmail: "please enter correct Email",
+    wrongPassword: "please enter correct Password",
   };
-  const errorMessageInLoginForm = [];
+  let errorMessageInLoginForm = [];
 
   const emailError = document.getElementById("emailError");
   const passwordError = document.getElementById("passwordError");
 
-  const emailValidation = document.getElementById("mail_validation").value;
-  const passwordValidation = document.getElementById(
-    "password_validation"
-  ).value;
+  const emailValidation = document
+    .getElementById("mail_validation")
+    .value.trim();
+  const passwordValidation = document
+    .getElementById("password_validation")
+    .value.trim();
 
+  if (!emailValidation) {
+    errorMessageInLoginForm.push({ email: validationMessage.email });
+  } else {
+    errorMessageInLoginForm.push({ email: "" });
+  }
 
+  if (!passwordValidation) {
+    errorMessageInLoginForm.push({ password: validationMessage.password });
+  } else {
+    errorMessageInLoginForm.push({ password: "" });
+  }
 
-  //target all stored data from localStorage
-  let registerData = JSON.parse(localStorage.getItem("user"));
+  if (emailValidation !== "" && passwordValidation !== "") {
+    errorMessageInLoginForm = [];
+    //target all stored data from localStorage
+    let registerData = JSON.parse(localStorage.getItem("user"));
 
-  for (let i = 0; i < registerData.length; i++) {
-    if (
-      emailValidation === registerData[i].email &&
-      passwordValidation === registerData[i].password &&
-      emailValidation !== "" &&
-      passwordValidation !== ""
-    ) {
+    let filteredRegisteredData = registerData.filter(
+      (item) =>
+        item.email === emailValidation && item.password === passwordValidation
+    );
+    
+    if (filteredRegisteredData.length) {
       localStorage.setItem("isAuth", JSON.stringify(true));
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify(
+          `${filteredRegisteredData[0].fName} ${filteredRegisteredData[0].lName}`
+        )
+      );
 
-      localStorage.setItem("userInfo",JSON.stringify(`${registerData[i].fName} ${registerData[i].lName}`));
       displayLandingPage();
-      
-      
-    }
-
-    if (!emailValidation || emailValidation !== registerData[i].email) {
-      errorMessageInLoginForm.push({ email: validationMessage.email });
     } else {
-      errorMessageInLoginForm.push({ email: "" });
+      if (
+        !registerData.filter((item) => item.email === emailValidation).length
+      ) {
+        errorMessageInLoginForm.push({ email: validationMessage.wrongEmail });
+      } else {
+        errorMessageInLoginForm.push({ email: "" });
+      }
+      if (
+        !registerData.filter((item) => item.password === passwordValidation).length
+          
+      ) {
+        errorMessageInLoginForm.push({
+          password: validationMessage.wrongPassword,
+        });
+      } else {
+        errorMessageInLoginForm.push({ password: "" });
+      }
     }
-
-    if (
-      !passwordValidation ||
-      passwordValidation !== registerData[i].password
-    ) {
-      errorMessageInLoginForm.push({ password: validationMessage.password });
-    } else {
-      errorMessageInLoginForm.push({ password: "" });
-    }
-
- 
+  }
+  
+  if (errorMessageInLoginForm.length > 0) {
     emailError.innerHTML = errorMessageInLoginForm[0]["email"];
     passwordError.innerHTML = errorMessageInLoginForm[1]["password"];
   }
@@ -270,30 +296,70 @@ const preventSubmitForm = (event) => {
 };
 
 let logOffHandler = () => {
-  
   localStorage.removeItem("userInfo");
-    localStorage.setItem("isAuth", JSON.stringify(false));
+  localStorage.setItem("isAuth", JSON.stringify(false));
 
-    displayPage.innerHTML = homePage;
+  displayPage.innerHTML = homePage;
   // }
 };
 displayLandingPage();
 
-const changeHiddenImage = ()=>{
-    const passwordImg = document.getElementById("password");
-    const hiddenImage = document.getElementById("hiddenImage");
-    const showImage = document.getElementById("showImage");
-    hiddenImage.style.display = "none";
-    showImage.style.display = "block";
-    passwordImg.setAttribute("type", "text");
-
-}
-const changeShowImage = ()=> {
+const changeRegisterPageHiddenImage = () => {
+  const passwordImg = document.getElementById("password");
+  const hiddenImage = document.getElementById("hiddenImage");
+  const showImage = document.getElementById("showImage");
+  hiddenImage.style.display = "none";
+  showImage.style.display = "block";
+  passwordImg.setAttribute("type", "text");
+};
+const changeRegisterPageShowImage = () => {
   const passwordImg = document.getElementById("password");
   const hiddenImage = document.getElementById("hiddenImage");
   const showImage = document.getElementById("showImage");
   showImage.style.display = "none";
   hiddenImage.style.display = "block";
   passwordImg.setAttribute("type", "password");
+};
 
-}
+const changeLoginPageHiddenImage = () => {
+  const hiddenImage = document.getElementById("hiddenImage");
+  const showImage = document.getElementById("showImage");
+  hiddenImage.style.display = "none";
+  showImage.style.display = "block";
+  document.getElementById("password_validation").setAttribute("type", "text");
+};
+
+const changeLoginPageShowImage = () => {
+  const hiddenImage = document.getElementById("hiddenImage");
+  const showImage = document.getElementById("showImage");
+  showImage.style.display = "none";
+  hiddenImage.style.display = "block";
+  document
+    .getElementById("password_validation")
+    .setAttribute("type", "password");
+};
+
+//clean register error message after click in input field.
+const clearfNameSpan = () =>
+  (document.getElementById("fNameErrorMsg").innerHTML = "");
+
+const clearlNameSpan = () =>
+  (document.getElementById("lNameErrorMsg").innerHTML = "");
+
+const clearEmailSpan = () =>
+  (document.getElementById("emailErrorMsg").innerHTML = "");
+
+const clearPasswordSpan = () =>
+  (document.getElementById("passwordErrorMsg").innerHTML = "");
+
+
+//clean login error message after click in input field.
+const deleteEmailError = () => {
+  const emailError = document.getElementById("emailError");
+  emailError.innerHTML = "";
+};
+
+const deletePassword = () => {
+  const passwordError = document.getElementById("passwordError");
+  passwordError.innerHTML = "";
+};
